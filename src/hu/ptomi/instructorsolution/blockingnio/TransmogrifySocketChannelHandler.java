@@ -1,4 +1,4 @@
-package hu.ptomi.instructorsolution.nio;
+package hu.ptomi.instructorsolution.blockingnio;
 
 import hu.ptomi.instructorsolution.Handler;
 import hu.ptomi.util.Utils;
@@ -11,12 +11,12 @@ public class TransmogrifySocketChannelHandler implements Handler<SocketChannel> 
     @Override
     public void handle(SocketChannel sc) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocateDirect(80);
-        int read = sc.read(buffer);
-        if (read == -1) {
+        int numOfReadBytes = sc.read(buffer);
+        if (numOfReadBytes == -1) {
             sc.close();
             return;
         }
-        if (read > 0) {
+        if (numOfReadBytes > 0) {
             Utils.transmogrify(buffer);
             while (buffer.hasRemaining()) {
                 sc.write(buffer);

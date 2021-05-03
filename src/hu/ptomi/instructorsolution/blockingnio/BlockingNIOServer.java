@@ -1,4 +1,4 @@
-package hu.ptomi.instructorsolution.nio;
+package hu.ptomi.instructorsolution.blockingnio;
 
 import hu.ptomi.instructorsolution.ExecutorServiceHandler;
 import hu.ptomi.instructorsolution.Handler;

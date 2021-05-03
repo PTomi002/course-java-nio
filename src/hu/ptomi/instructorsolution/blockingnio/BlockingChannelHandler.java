@@ -1,4 +1,4 @@
-package hu.ptomi.instructorsolution.nio;
+package hu.ptomi.instructorsolution.blockingnio;
 
 import hu.ptomi.instructorsolution.DecoratedHandler;
 import hu.ptomi.instructorsolution.Handler;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 public class BlockingChannelHandler extends DecoratedHandler<SocketChannel> {
-    protected BlockingChannelHandler(Handler<SocketChannel> other) {
+    public BlockingChannelHandler(Handler<SocketChannel> other) {
         super(other);
     }
 
