@@ -3,7 +3,7 @@ package hu.ptomi.instructorsolution;
 import java.io.IOException;
 
 public class PrintingHandler<S> extends DecoratedHandler<S> {
-    PrintingHandler(Handler<S> other) {
+    public PrintingHandler(Handler<S> other) {
         super(other);
     }
 
