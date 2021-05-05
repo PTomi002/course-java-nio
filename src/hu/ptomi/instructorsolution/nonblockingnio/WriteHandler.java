@@ -33,6 +33,8 @@ public class WriteHandler implements Handler<SelectionKey> {
             }
             // The capacity is 80, if I can only write 13 bytes in a non-blocking way,
             //      then I have to jump out of this loop, give up for now and return later.
+            // Next time we will be able to write the remaining bytes in a non-blocking fashion.
+            // This ensures that we write all we can *without blocking* and then continue with the next client.
             if (buffer.hasRemaining()) return;
             queue.remove();
         }

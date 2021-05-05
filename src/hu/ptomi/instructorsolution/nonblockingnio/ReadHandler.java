@@ -10,7 +10,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.Queue;
 
-public class ReadHandler<T> implements Handler<SelectionKey> {
+public class ReadHandler implements Handler<SelectionKey> {
     private final Map<SocketChannel, Queue<ByteBuffer>> pendingData;
 
     public ReadHandler(Map<SocketChannel, Queue<ByteBuffer>> pendingData) {
@@ -24,6 +24,10 @@ public class ReadHandler<T> implements Handler<SelectionKey> {
         ByteBuffer buffer = ByteBuffer.allocateDirect(80);
         int numOfReadBytes = sc.read(buffer);
 
+        // ByteBuffer will simply be garbage collected, although if they are direct buffers,
+        //      then the GC is a bit complicated.
+        // Instead of just being collected, they need to be cleaned by their phantom references.
+        // It might take a while and could require a full GC.
         if (numOfReadBytes == -1) { // Most probably closed the socket.
             sc.close();
             System.out.println("Disconnected from (in read): " + sc);

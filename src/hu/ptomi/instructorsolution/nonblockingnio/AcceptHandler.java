@@ -8,11 +8,22 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * SelectionKey allows to attach() an arbitrary object to it, so as an alternative to using the pendingData Map, we could attach the ByteBuffer queue in AcceptHandler:
+ *
+ * sc.register(key.selector(), SelectionKey.OP_READ, new ConcurrentLinkedQueue<>());
+ *
+ * and retrieve it in ReadHandler and WriteHandler:
+ *
+ * @SuppressWarnings("unchecked") Queue queue = (Queue) key.attachment();
+ *
+ * It seems to also work :)
+ */
 public class AcceptHandler implements Handler<SelectionKey> {
     private final Map<SocketChannel, Queue<ByteBuffer>> pendingData;
 
@@ -29,7 +40,7 @@ public class AcceptHandler implements Handler<SelectionKey> {
         sc.configureBlocking(false);
 
         System.out.println("Connected to: " + sc);
-        pendingData.put(sc, new ArrayDeque<>());
+        pendingData.put(sc, new ConcurrentLinkedQueue<>());
 
         sc.register(selector, SelectionKey.OP_READ);
     }
